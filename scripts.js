@@ -11,6 +11,8 @@ window.onload = function()
     var witdhInBlocks = canvasWidth/blockSize
     var heightInBlocks = canvasHeight/blockSize
     var score = 0
+    var timeout
+    var userName
     
     init()
     
@@ -29,6 +31,7 @@ window.onload = function()
         snayki = new Snake([[6,4],[5,4],[4,4]],"right")
         pommli = new Apple([10,10])
         refreshCanvas()
+        userName = askName()
 
     }
 
@@ -53,27 +56,61 @@ window.onload = function()
                 while(pommli.isOnSnake(snayki))
             }
             ctx.clearRect(0,0,canvasWidth,canvasHeight)
+            drawScore()
             snayki.draw()
             pommli.draw()
-            drawScore()
-            setTimeout(refreshCanvas,delay)
+            displayName(userName)
+            timeout = setTimeout(refreshCanvas,delay)
         }
 
+
+    }
+
+    function askName(){
+        var userName = prompt("Quel est ton nom ? ")
+        return userName
+    }
+
+    function displayName(name)
+    {
+        ctx.save()
+        ctx.font = "bold 20px sans-serif"
+        ctx.fillStyle = "blue"
+        ctx.strokeStyle = "dark"
+        ctx.fillText(name,5,20)
+        ctx.strokeText(name,5,20)
+        ctx.restore()
     }
 
     function gameOver()
     {
         ctx.save()
-        ctx.fillText("Game Over",5,15)
-        ctx.fillText("Appuyer sur la touche espace pour rejouer",5,30)
+        ctx.font = "bold 70px sans-serif"
+        ctx.fillStyle = "gray"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.strokeStyle = "dark"
+        ctx.lineWidth = 5
+        var centreX = canvasWidth / 2
+        var centreY = canvasHeight / 2
+        ctx.strokeText("Game Over",centreX,centreY - 180)
+        ctx.fillText("Game Over",centreX,centreY - 180)
+        ctx.font = "bold 30px sans-serif"
+        ctx.strokeText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
+        ctx.fillText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
         ctx.restore()
     }
 
     function drawScore()
     {
         ctx.save()
-        ctx.font = "bold 200px sans-sherif"
-        ctx.fillText(score.toString(),5,canvasHeight-5)
+        ctx.font = "bold 200px sans-serif"
+        ctx.fillStyle = "gray"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        var centreX = canvasWidth / 2
+        var centreY = canvasHeight / 2
+        ctx.fillText(score.toString(),centreX,centreY)
         ctx.restore()
     }
 
@@ -240,6 +277,7 @@ window.onload = function()
         snayki = new Snake([[6,4],[5,4],[4,4]],"right")
         pommli = new Apple([10,10])
         score = 0
+        clearTimeout(timeout)
         refreshCanvas()
     }
     
