@@ -20,7 +20,10 @@ window.onload = function()
         canvas = document.createElement('canvas')
         canvas.width = canvasWidth
         canvas.height = canvasHeight
-        canvas.style.border = "1px solid"
+        canvas.style.border = "30px solid grey"
+        canvas.style.margin = "50px auto"
+        canvas.style.display = "block"
+        canvas.style.background = "#ddd"
         this.document.body.appendChild(canvas)
         ctx = canvas.getContext("2d")
         snayki = new Snake([[6,4],[5,4],[4,4]],"right")
@@ -69,7 +72,8 @@ window.onload = function()
     function drawScore()
     {
         ctx.save()
-        ctx.fillText(score.toString(),witdhInBlocks/2,heightInBlocks/2)
+        ctx.font = "bold 200px sans-sherif"
+        ctx.fillText(score.toString(),5,canvasHeight-5)
         ctx.restore()
     }
 
