@@ -52,7 +52,7 @@ window.onload = function()
             ctx.clearRect(0,0,canvasWidth,canvasHeight)
             snayki.draw()
             pommli.draw()
-            ctx.fillText(score,witdhInBlocks/2,heightInBlocks/2)
+            drawScore()
             setTimeout(refreshCanvas,delay)
         }
 
@@ -63,6 +63,13 @@ window.onload = function()
         ctx.save()
         ctx.fillText("Game Over",5,15)
         ctx.fillText("Appuyer sur la touche espace pour rejouer",5,30)
+        ctx.restore()
+    }
+
+    function drawScore()
+    {
+        ctx.save()
+        ctx.fillText(score.toString(),witdhInBlocks/2,heightInBlocks/2)
         ctx.restore()
     }
 
