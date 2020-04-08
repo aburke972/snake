@@ -13,6 +13,7 @@ window.onload = function()
     var score = 0
     var timeout
     var userName
+    var snakeColor
     
     init()
     
@@ -28,11 +29,12 @@ window.onload = function()
         canvas.style.background = "#ddd"
         this.document.body.appendChild(canvas)
         ctx = canvas.getContext("2d")
-        snayki = new Snake([[6,4],[5,4],[4,4]],"right")
+
+        userName = askName()
+        snakeColor = askUserColorPreferences()
+        snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
         pommli = new Apple([10,10])
         refreshCanvas()
-        userName = askName()
-
     }
 
     function refreshCanvas()
@@ -71,12 +73,36 @@ window.onload = function()
         return userName
     }
 
+    function askUserColorPreferences()
+    {
+        var colorChoice = prompt("Couleur du serpent ? Violet (v) / Rouge (r) / Jaune (j)")
+        console.log("touche pressee: " + colorChoice)
+        switch (colorChoice){
+
+            case "v":
+                snakeColor = "violet"
+                break
+            
+            case "j":
+                snakeColor = "#ffff00"
+                break
+
+            case "r":
+                snakeColor = "#cc0000"
+                break
+            
+            default:
+                snakeColor = "black"
+        }
+        return snakeColor
+    }
+
     function displayName(name)
     {
         ctx.save()
-        ctx.font = "bold 20px sans-serif"
-        ctx.fillStyle = "blue"
-        ctx.strokeStyle = "dark"
+        ctx.font = "bold 30px sans-serif"
+        ctx.fillStyle = "#ffff66"
+        ctx.strokeStyle = "#ff9900"
         ctx.fillText(name,5,20)
         ctx.strokeText(name,5,20)
         ctx.restore()
@@ -159,15 +185,16 @@ window.onload = function()
 
     }
 
-    function Snake(body,direction)
+    function Snake(body,direction,color)
     {
         this.body = body
         this.direction = direction
         this.ateApple = false
+        this.color = color
         this.draw = function()
         {
             ctx.save()
-            ctx.fillStyle = "#ff0000"
+            ctx.fillStyle = this.color
             for(var i = 0; i < this.body.length; i++)
             {
                 drawBlock(ctx, this.body[i])
@@ -274,7 +301,7 @@ window.onload = function()
 
     function ricoumencer()
     {
-        snayki = new Snake([[6,4],[5,4],[4,4]],"right")
+        snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
         pommli = new Apple([10,10])
         score = 0
         clearTimeout(timeout)
@@ -285,6 +312,7 @@ document.onkeydown = function handleKeyDown(e)
 {
     var key = e.keyCode;
     var newDirection;
+
     switch(key)
     {
         case 37:
@@ -310,7 +338,7 @@ document.onkeydown = function handleKeyDown(e)
         default:
             throw("Invalid direction !!");
     }
-    snayki.setDirection(newDirection)
+    snayki.setDirection(newDirection)  
 }
 
 }
