@@ -31,9 +31,10 @@ window.onload = function()
         ctx = canvas.getContext("2d")
 
         userName = askName()
-        snakeColor = askUserColorPreferences()
+        snakeColor = askSnakeColor()
+        appleColor = askAppleColor()
         snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
-        pommli = new Apple([10,10])
+        pommli = new Apple([10,10],appleColor)
         refreshCanvas()
     }
 
@@ -73,7 +74,12 @@ window.onload = function()
         return userName
     }
 
-    function askUserColorPreferences()
+    function askAppleColor()
+    {
+        var colorChoice = prompt("Rendez-vous sur le site https://www.w3schools.com/colors/colors_picker.asp et coller le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
+        return colorChoice
+    }
+    function askSnakeColor()
     {
         var colorChoice = prompt("Couleur du serpent ? Violet (v) / Rouge (r) / Jaune (j)")
         console.log("touche pressee: " + colorChoice)
@@ -147,13 +153,14 @@ window.onload = function()
         ctx.fillRect(x,y,blockSize,blockSize)
     }
 
-    function Apple(position)
+    function Apple(position,color)
     {
         this.position = position
+        this.color = color
         this.draw = function()
         {
             ctx.save()
-            ctx.fillStyle = "#33cc33"
+            ctx.fillStyle = this.color
             ctx.beginPath()
             var radius = blockSize/2
             var x = this.position[0]*blockSize + radius
