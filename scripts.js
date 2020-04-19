@@ -103,14 +103,15 @@ window.onload = function()
         ctx.fillRect(x,y,blockSize,blockSize)
     }
 
-    function Snake(body,direction,color)
-    {
-        this.body = body
-        this.direction = direction
-        this.ateApple = false
-        this.color = color
-        this.draw = function()
-        {
+    class Snake {
+        constructor(body,direction,color) {
+            this.body = body
+            this.direction = direction
+            this.ateApple = false
+            this.color = color
+        }
+
+        draw () {
             ctx.save()
             ctx.fillStyle = this.color
             for(let i = 0; i < this.body.length; i++)
@@ -120,8 +121,7 @@ window.onload = function()
             ctx.restore()
         }
 
-        this.move = function()
-        {
+        move () {
             const nextPosition = this.body[0].slice();
             switch(this.direction)
             {
@@ -151,8 +151,7 @@ window.onload = function()
                 this.ateApple = false
         }
 
-        this.setDirection = function(newDirection)
-        {
+        setDirection (newDirection) {
             let allowedDirections;
             switch(this.direction)
             {
@@ -175,8 +174,7 @@ window.onload = function()
             }
         }
 
-        this.checkCollision = function()
-        {
+        checkCollision () {
             let wallCollision = false
             let snakeCollision = false
             const head = this.body[0]
@@ -207,8 +205,7 @@ window.onload = function()
 
         }
 
-        this.isEatingApple = function(appleToEat)
-        {
+        isEatingApple (appleToEat) {
             const head = this.body[0]
             if(head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1])
                 return true
@@ -217,12 +214,14 @@ window.onload = function()
         }
     }
 
-    function Apple(position,color)
-    {
-        this.position = position
-        this.color = color
-        this.draw = function()
-        {
+    class Apple {
+        
+        constructor(position,color){
+            this.position = position
+            this.color = color
+        }
+
+        draw() {
             const radius = blockSize/2
             const x = this.position[0]*blockSize + radius
             const y = this.position[1]*blockSize + radius
@@ -234,15 +233,13 @@ window.onload = function()
             ctx.restore()
         }
 
-        this.setNewPosition = function()
-        {
+        setNewPosition () {
             const newX = Math.round(Math.random() * (witdhInBlocks -1))
             const newY = Math.round(Math.random() * (heightInBlocks -1))
             this.position = [newX,newY]
         }
 
-        this.isOnSnake = function(snakeToCheck)
-        {
+        isOnSnake(snakeToCheck){
             let isOnSnake = false
             for(let i = 0; i < snakeToCheck.body.length; i ++)
             {
