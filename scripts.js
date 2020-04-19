@@ -5,7 +5,7 @@ window.onload = function()
     const blockSize = 30 
     const canvas = document.createElement('canvas')
     const ctx  = canvas.getContext("2d")
-    let delay = 100
+    const delay = 100
     let snayki
     let pommli
     const witdhInBlocks = canvasWidth/blockSize
@@ -13,6 +13,7 @@ window.onload = function()
     const centreX = canvasWidth / 2
     const centreY = canvasHeight / 2
     let score
+    let timeout
     
     init()
     
@@ -28,10 +29,8 @@ window.onload = function()
         canvas.style.display = "block"
         canvas.style.background = "#ddd"
         this.document.body.appendChild(canvas)
-        snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
-        pommli  = new Apple([10,10],appleColor)
-        score = 0
-        refreshCanvas()
+        launch()
+        //refreshCanvas()
     }
 
     function refreshCanvas()
@@ -82,7 +81,7 @@ window.onload = function()
         ctx.restore()
     }
 
-    function ricoumencer()
+    function launch()
     {
         snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
         pommli = new Apple([10,10])
@@ -308,7 +307,6 @@ window.onload = function()
         ctx.strokeText(name,5,20)
         ctx.restore()
     }
-
     
 document.onkeydown = function handleKeyDown(e)
 {
@@ -334,7 +332,7 @@ document.onkeydown = function handleKeyDown(e)
             break;
         
         case 32:
-            ricoumencer()
+            launch()
             return
 
         default:
