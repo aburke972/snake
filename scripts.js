@@ -15,13 +15,12 @@ window.onload = function()
     let score
     let timeout
     
-    init()
-    
-    function init()
-    {
-        const snakeColor = askSnakeColor()
-        const appleColor = askAppleColor()
+    const init = () => {
         const userName = askName()
+        /*
+        const snakeColor = askSnakeColor()
+        const appleColor = askAppleColor() */
+
         canvas.width = canvasWidth
         canvas.height = canvasHeight
         canvas.style.border = "30px solid grey"
@@ -30,11 +29,9 @@ window.onload = function()
         canvas.style.background = "#ddd"
         this.document.body.appendChild(canvas)
         launch()
-        //refreshCanvas()
     }
 
-    function refreshCanvas()
-    {  
+    const refreshCanvas = () => {
         snayki.move()
         if(snayki.checkCollision())
         {
@@ -64,8 +61,7 @@ window.onload = function()
 
     }
 
-    function gameOver()
-    {
+    const gameOver = () => {
         ctx.save()
         ctx.font = "bold 70px sans-serif"
         ctx.fillStyle = "gray"
@@ -81,17 +77,17 @@ window.onload = function()
         ctx.restore()
     }
 
-    function launch()
-    {
+    const launch = () => {
+        const snakeColor = askSnakeColor()
+        const appleColor = askAppleColor()
         snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
-        pommli = new Apple([10,10])
+        pommli = new Apple([10,10],appleColor)
         score = 0
         clearTimeout(timeout)
         refreshCanvas()
     }
 
-    function drawScore()
-    {
+    const drawScore = () => {
         ctx.save()
         ctx.font = "bold 200px sans-serif"
         ctx.fillStyle = "gray"
@@ -101,8 +97,7 @@ window.onload = function()
         ctx.restore()
     }
 
-    function drawBlock(ctx,position)
-    {
+    const drawBlock = (ctx,position) => {
         const x = position[0] * blockSize;
         const y = position[1] * blockSize;
         ctx.fillRect(x,y,blockSize,blockSize)
@@ -262,19 +257,17 @@ window.onload = function()
 
     }
 
-    function askName(){
+    const askName = () => {
         userName = prompt("Quel est ton nom ? ")
         return userName
     }
 
-    function askAppleColor()
-    {
+    const askAppleColor = () => {
         colorChoice = prompt("Rendez-vous sur le site https://www.w3schools.com/colors/colors_picker.asp et coller le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
         return colorChoice
     }
 
-    function askSnakeColor()
-    {
+    const askSnakeColor = () => {
         const colorChoice = prompt("Couleur du serpent ? Violet (v) / Rouge (r) / Jaune (j)")
         console.log("touche pressee: " + colorChoice)
         switch (colorChoice){
@@ -297,8 +290,7 @@ window.onload = function()
         return snakeColor
     }
 
-    function displayName(name)
-    {
+    const displayName = name => {
         ctx.save()
         ctx.font = "bold 30px sans-serif"
         ctx.fillStyle = "#ffff66"
@@ -340,5 +332,7 @@ document.onkeydown = function handleKeyDown(e)
     }
     snayki.setDirection(newDirection)  
 }
+
+init()
 
 }
