@@ -97,9 +97,8 @@ window.onload = function()
     }
 
     const drawBlock = (ctx,position) => {
-        const x = position[0] * blockSize;
-        const y = position[1] * blockSize;
-        ctx.fillRect(x,y,blockSize,blockSize)
+        const [x,y] = position;
+        ctx.fillRect(x*blockSize,y*blockSize,blockSize,blockSize)
     }
 
     const speedUp = () => {
@@ -180,10 +179,8 @@ window.onload = function()
         checkCollision () {
             let wallCollision = false
             let snakeCollision = false
-            const head = this.body[0]
-            const bodyRest = this.body.slice(1)
-            const snakeX = head[0]
-            const snakeY = head[1]
+            const [head, ...bodyRest] = this.body
+            const [snakeX, snakeY] = head
             const minX = 0
             const minY = 0
             const maxX = witdhInBlocks - 1
