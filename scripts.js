@@ -17,10 +17,6 @@ window.onload = function()
     
     const init = () => {
         const userName = askName()
-        /*
-        const snakeColor = askSnakeColor()
-        const appleColor = askAppleColor() */
-
         canvas.width = canvasWidth
         canvas.height = canvasHeight
         canvas.style.border = "30px solid grey"
@@ -82,7 +78,7 @@ window.onload = function()
     const launch = () => {
         const snakeColor = askSnakeColor()
         const appleColor = askAppleColor()
-        snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
+        snayki = new Snake("right",snakeColor,[6,4],[5,4],[4,4])
         pommli = new Apple([10,10],appleColor)
         score = 0
         delay = 100
@@ -111,7 +107,7 @@ window.onload = function()
     }
 
     class Snake {
-        constructor(body,direction,color) {
+        constructor(direction,color,...body) {
             this.body = body
             this.direction = direction
             this.ateApple = false
@@ -267,7 +263,10 @@ window.onload = function()
     }
 
     const askAppleColor = () => {
-        colorChoice = prompt("Rendez-vous sur le site https://www.w3schools.com/colors/colors_picker.asp et coller le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
+        colorChoice = prompt(`Choisir la couleur de la pomme. 
+        2 possibilités :
+        - Rends-toi sur le site https://www.w3schools.com/colors/colors_picker.asp et colle le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
+        - Saisis en ANGLAIS le nom de la couleur que tu veux`)
         return colorChoice
     }
 
