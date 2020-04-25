@@ -85,6 +85,7 @@ window.onload = function()
         snayki = new Snake([[6,4],[5,4],[4,4]],"right",snakeColor)
         pommli = new Apple([10,10],appleColor)
         score = 0
+        delay = 100
         clearTimeout(timeout)
         refreshCanvas()
     }
@@ -106,7 +107,6 @@ window.onload = function()
     }
 
     const speedUp = () => {
-       // delay = delay/2
        delay /= 2
     }
 
