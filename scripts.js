@@ -5,7 +5,7 @@ window.onload = function()
     const blockSize = 30 
     const canvas = document.createElement('canvas')
     const ctx  = canvas.getContext("2d")
-    const delay = 100
+    let delay = 100
     let snayki
     let pommli
     const witdhInBlocks = canvasWidth/blockSize
@@ -49,6 +49,8 @@ window.onload = function()
                     pommli.setNewPosition()
                 }
                 while(pommli.isOnSnake(snayki))
+
+                if(score %5 == 0) speedUp()
             }
             ctx.clearRect(0,0,canvasWidth,canvasHeight)
             drawScore()
@@ -101,6 +103,11 @@ window.onload = function()
         const x = position[0] * blockSize;
         const y = position[1] * blockSize;
         ctx.fillRect(x,y,blockSize,blockSize)
+    }
+
+    const speedUp = () => {
+       // delay = delay/2
+       delay /= 2
     }
 
     class Snake {
