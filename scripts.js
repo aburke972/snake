@@ -117,9 +117,9 @@ window.onload = function()
         draw () {
             ctx.save()
             ctx.fillStyle = this.color
-            for(let i = 0; i < this.body.length; i++)
+            for(let block of this.body)
             {
-                drawBlock(ctx, this.body[i])
+                drawBlock(ctx, block)
             }
             ctx.restore()
         }
@@ -196,9 +196,9 @@ window.onload = function()
                 wallCollision = true;
             }
 
-            for(let i = 0; i < bodyRest.length; i ++)
+            for(let block of bodyRest)
             {
-                if(snakeX === bodyRest[i][0] && snakeY === bodyRest[i][1])
+                if(snakeX === block[0] && snakeY === block[1])
                 {
                     snakeCollision = true
                 }
@@ -244,9 +244,9 @@ window.onload = function()
 
         isOnSnake(snakeToCheck){
             let isOnSnake = false
-            for(let i = 0; i < snakeToCheck.body.length; i ++)
+            for(let block of snakeToCheck.body)
             {
-                if(this.position[0] === snakeToCheck.body[i][0] &&  this.position[1] === snakeToCheck.body[i][1])
+                if(this.position[0] === block[0] &&  this.position[1] === block[1])
                 {
                     isOnSnake = true;
                 }
@@ -265,8 +265,9 @@ window.onload = function()
     const askAppleColor = () => {
         colorChoice = prompt(`Choisir la couleur de la pomme. 
         2 possibilités :
-        - Rends-toi sur le site https://www.w3schools.com/colors/colors_picker.asp et colle le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
-        - Saisis en ANGLAIS le nom de la couleur que tu veux`)
+        Rends-toi sur le site https://www.w3schools.com/colors/colors_picker.asp et colle le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
+        OU
+        Saisis en ANGLAIS le nom de la couleur que tu veux`)
         return colorChoice
     }
 
