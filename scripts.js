@@ -31,7 +31,7 @@ window.onload = function()
         snayki.move()
         if(snayki.checkCollision())
         {
-            gameOver()
+            Drawing.gameOver(ctx,centreX,centreY)
         }
         else
         {
@@ -49,30 +49,14 @@ window.onload = function()
                // if(score %5 == 0) speedUp()
             }
             ctx.clearRect(0,0,canvasWidth,canvasHeight)
-            drawScore()
-            snayki.draw()
-            pommli.draw()
+            Drawing.drawScore(ctx,centreX,centreY,score)
+            Drawing.drawSnake(ctx,blockSize,snayki)
+            Drawing.drawApple(ctx,blockSize,pommli)
             displayName(userName)
             timeout = setTimeout(refreshCanvas,delay)
         }
 
 
-    }
-
-    const gameOver = () => {
-        ctx.save()
-        ctx.font = "bold 70px sans-serif"
-        ctx.fillStyle = "gray"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-        ctx.strokeStyle = "dark"
-        ctx.lineWidth = 5
-        ctx.strokeText("Game Over",centreX,centreY - 180)
-        ctx.fillText("Game Over",centreX,centreY - 180)
-        ctx.font = "bold 30px sans-serif"
-        ctx.strokeText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
-        ctx.fillText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
-        ctx.restore()
     }
 
     const launch = () => {
@@ -86,23 +70,65 @@ window.onload = function()
         refreshCanvas()
     }
 
-    const drawScore = () => {
-        ctx.save()
-        ctx.font = "bold 200px sans-serif"
-        ctx.fillStyle = "gray"
-        ctx.textAlign = "center"
-        ctx.textBaseline = "middle"
-        ctx.fillText(score.toString(),centreX,centreY)
-        ctx.restore()
-    }
-
-    const drawBlock = (ctx,position) => {
-        const [x,y] = position;
-        ctx.fillRect(x*blockSize,y*blockSize,blockSize,blockSize)
-    }
-
     const speedUp = () => {
        delay /= 2
+    }
+
+    class Drawing {
+
+        static gameOver(ctx,centreX,centreY) {
+            ctx.save()
+            ctx.font = "bold 70px sans-serif"
+            ctx.fillStyle = "gray"
+            ctx.textAlign = "center"
+            ctx.textBaseline = "middle"
+            ctx.strokeStyle = "dark"
+            ctx.lineWidth = 5
+            ctx.strokeText("Game Over",centreX,centreY - 180)
+            ctx.fillText("Game Over",centreX,centreY - 180)
+            ctx.font = "bold 30px sans-serif"
+            ctx.strokeText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
+            ctx.fillText("Appuyer sur la touche espace pour rejouer",centreX,centreY - 100)
+            ctx.restore()
+        }
+
+        static drawScore(ctx,centreX,centreY,score) {
+            ctx.save()
+            ctx.font = "bold 200px sans-serif"
+            ctx.fillStyle = "gray"
+            ctx.textAlign = "center"
+            ctx.textBaseline = "middle"
+            ctx.fillText(score.toString(),centreX,centreY)
+            ctx.restore()
+        }
+
+        static drawSnake(ctx,blockSize,snake) {
+            ctx.save()
+            ctx.fillStyle = this.color
+            for(let block of snake.body)
+            {
+                this.drawBlock(ctx, block,blockSize)
+            }
+            ctx.restore()
+        }
+
+        static drawApple(ctx,blockSize,apple) {
+            const radius = blockSize/2
+            const x = apple.position[0]*blockSize + radius
+            const y = apple.position[1]*blockSize + radius
+            ctx.save()
+            ctx.fillStyle = apple.color
+            ctx.beginPath()
+            ctx.arc(x,y,radius,0,Math.PI*2,true)
+            ctx.fill()
+            ctx.restore()
+        }
+
+        static drawBlock(ctx,position,blockSize) {
+            const [x,y] = position;
+            ctx.fillRect(x*blockSize,y*blockSize,blockSize,blockSize)
+        }
+
     }
 
     class Snake {
@@ -111,16 +137,6 @@ window.onload = function()
             this.direction = direction
             this.ateApple = false
             this.color = color
-        }
-
-        draw () {
-            ctx.save()
-            ctx.fillStyle = this.color
-            for(let block of this.body)
-            {
-                drawBlock(ctx, block)
-            }
-            ctx.restore()
         }
 
         move () {
@@ -219,18 +235,6 @@ window.onload = function()
         constructor(position,color){
             this.position = position
             this.color = color
-        }
-
-        draw() {
-            const radius = blockSize/2
-            const x = this.position[0]*blockSize + radius
-            const y = this.position[1]*blockSize + radius
-            ctx.save()
-            ctx.fillStyle = this.color
-            ctx.beginPath()
-            ctx.arc(x,y,radius,0,Math.PI*2,true)
-            ctx.fill()
-            ctx.restore()
         }
 
         setNewPosition () {
