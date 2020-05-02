@@ -1,77 +1,129 @@
 window.onload = function()
 {
-    const canvasWidth = 900
-    const canvasHeight = 600
-    const blockSize = 30 
-    const canvas = document.createElement('canvas')
-    const ctx  = canvas.getContext("2d")
-    let delay = 100
-    let snayki
-    let pommli
-    const witdhInBlocks = canvasWidth/blockSize
-    const heightInBlocks = canvasHeight/blockSize
-    const centreX = canvasWidth / 2
-    const centreY = canvasHeight / 2
-    let score
-    let timeout
+    class Game {
+
+        constructor()
+        {
+            this.canvasWidth = 900
+            this.canvasHeight = 600
+            this.blockSize = 30 
+            this.canvas = document.createElement('canvas')
+            this.ctx  = this.canvas.getContext("2d")
+            this.delay = 100
+            this.snayki
+            this.pommli
+            this.witdhInBlocks = this.canvasWidth/this.blockSize
+            this.heightInBlocks = this.canvasHeight/this.blockSize
+            this.centreX = this.canvasWidth / 2
+            this.centreY = this.canvasHeight / 2
+            this.score
+            this.timeout
+        }
+
+        init() {
+            this.userName = this.askName()
+            this.canvas.width = this.canvasWidth
+            this.canvas.height = this.canvasHeight
+            this.canvas.style.border = "30px solid grey"
+            this.canvas.style.margin = "50px auto"
+            this.canvas.style.display = "block"
+            this.canvas.style.background = "#ddd"
+            document.body.appendChild(this.canvas)
+            this.launch()
+        }
     
-    const init = () => {
-        const userName = askName()
-        canvas.width = canvasWidth
-        canvas.height = canvasHeight
-        canvas.style.border = "30px solid grey"
-        canvas.style.margin = "50px auto"
-        canvas.style.display = "block"
-        canvas.style.background = "#ddd"
-        this.document.body.appendChild(canvas)
-        launch()
-    }
-
-    const refreshCanvas = () => {
-        snayki.move()
-        if(snayki.checkCollision())
-        {
-            Drawing.gameOver(ctx,centreX,centreY)
-        }
-        else
-        {
-            
-            if(snayki.isEatingApple(pommli))
+        refreshCanvas() {
+            this.snayki.move()
+            if(this.snayki.checkCollision(this.witdhInBlocks,this.heightInBlocks))
             {
-                snayki.ateApple = true
-                score ++
-                do
-                {
-                    pommli.setNewPosition()
-                }
-                while(pommli.isOnSnake(snayki))
-
-               // if(score %5 == 0) speedUp()
+                Drawing.gameOver(this.ctx,this.centreX,this.centreY)
             }
-            ctx.clearRect(0,0,canvasWidth,canvasHeight)
-            Drawing.drawScore(ctx,centreX,centreY,score)
-            Drawing.drawSnake(ctx,blockSize,snayki)
-            Drawing.drawApple(ctx,blockSize,pommli)
-            displayName(userName)
-            timeout = setTimeout(refreshCanvas,delay)
+            else
+            {
+                if(this.snayki.isEatingApple(this.pommli))
+                {
+                    this.snayki.ateApple = true
+                    this.score ++
+                    do
+                    {
+                        this.pommli.setNewPosition(this.witdhInBlocks,this.heightInBlocks)
+                    }
+                    while(this.pommli.isOnSnake(this.snayki))
+    
+                   // if(this.score %5 == 0) this.speedUp()
+                }
+                this.ctx.clearRect(0,0,this.canvasWidth,this.canvasHeight)
+                Drawing.drawScore(this.ctx,this.centreX,this.centreY,this.score)
+                Drawing.drawSnake(this.ctx,this.blockSize,this.snayki)
+                Drawing.drawApple(this.ctx,this.blockSize,this.pommli)
+                this.displayName(this.userName)
+                this.timeout = setTimeout(this.refreshCanvas.bind(this),this.delay)
+            }
+    
+    
+        }
+    
+        launch() {
+            this.snakeColor = this.askSnakeColor()
+            this.appleColor = this.askAppleColor()
+            this.snayki = new Snake("right",this.snakeColor,[6,4],[5,4],[4,4])
+            this.pommli = new Apple(this.appleColor)
+            this.score = 0
+            this.delay = 100
+            clearTimeout(this.timeout)
+            this.refreshCanvas()
+        }
+    
+        speedUp() {
+           this.delay /= 2
         }
 
-
-    }
-
-    const launch = () => {
-        const snakeColor = askSnakeColor()
-        const appleColor = askAppleColor()
-        snayki = new Snake("right",snakeColor,[6,4],[5,4],[4,4])
-        pommli = new Apple([10,10],appleColor)
-        score = 0
-        delay = 100
-        clearTimeout(timeout)
-        refreshCanvas()
-    }
-
-    const speedUp = () => {
-       delay /= 2
+        askName() {
+            const userName = prompt("Quel est ton nom ? ")
+            return userName
+        }
+    
+        askAppleColor() {
+            const colorChoice = prompt(`Choisir la couleur de la pomme. 
+            2 possibilités :
+            Rends-toi sur le site https://www.w3schools.com/colors/colors_picker.asp et colle le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
+            OU
+            Saisis en ANGLAIS le nom de la couleur que tu veux`)
+            return colorChoice
+        }
+    
+        askSnakeColor() {
+            const colorChoice = prompt("Couleur du serpent ? Violet (v) / Rouge (r) / Jaune (j)")
+            console.log("touche pressee: " + colorChoice)
+            switch (colorChoice){
+    
+                case "v":
+                    this.snakeColor = "violet"
+                    break
+                
+                case "j":
+                    this.snakeColor = "#ffff00"
+                    break
+    
+                case "r":
+                    this.snakeColor = "#cc0000"
+                    break
+                
+                default:
+                    this.snakeColor = "black"
+            }
+            return this.snakeColor
+        }
+    
+        displayName(name) {
+            this.ctx.save()
+            this.ctx.font = "bold 30px sans-serif"
+            this.ctx.fillStyle = "#ffff66"
+            this.ctx.strokeStyle = "#ff9900"
+            this.ctx.fillText(name,5,20)
+            this.ctx.strokeText(name,5,20)
+            this.ctx.restore()
+        }
     }
 
     class Drawing {
@@ -104,7 +156,7 @@ window.onload = function()
 
         static drawSnake(ctx,blockSize,snake) {
             ctx.save()
-            ctx.fillStyle = this.color
+            ctx.fillStyle = snake.color
             for(let block of snake.body)
             {
                 this.drawBlock(ctx, block,blockSize)
@@ -192,7 +244,7 @@ window.onload = function()
             }
         }
 
-        checkCollision () {
+        checkCollision (witdhInBlocks,heightInBlocks) {
             let wallCollision = false
             let snakeCollision = false
             const [head, ...bodyRest] = this.body
@@ -232,12 +284,12 @@ window.onload = function()
 
     class Apple {
         
-        constructor(position,color){
+        constructor(color,position = [10,10]){
             this.position = position
             this.color = color
         }
 
-        setNewPosition () {
+        setNewPosition (witdhInBlocks,heightInBlocks) {
             const newX = Math.round(Math.random() * (witdhInBlocks -1))
             const newY = Math.round(Math.random() * (heightInBlocks -1))
             this.position = [newX,newY]
@@ -258,86 +310,40 @@ window.onload = function()
 
     }
 
-    const askName = () => {
-        userName = prompt("Quel est ton nom ? ")
-        return userName
-    }
+    let myGame = new Game()
+    myGame.init()
 
-    const askAppleColor = () => {
-        colorChoice = prompt(`Choisir la couleur de la pomme. 
-        2 possibilités :
-        Rends-toi sur le site https://www.w3schools.com/colors/colors_picker.asp et colle le code hexadécimal (commence par #) de la couleur que vous souhaitez pour la pomme")
-        OU
-        Saisis en ANGLAIS le nom de la couleur que tu veux`)
-        return colorChoice
-    }
-
-    const askSnakeColor = () => {
-        const colorChoice = prompt("Couleur du serpent ? Violet (v) / Rouge (r) / Jaune (j)")
-        console.log("touche pressee: " + colorChoice)
-        switch (colorChoice){
-
-            case "v":
-                snakeColor = "violet"
-                break
-            
-            case "j":
-                snakeColor = "#ffff00"
-                break
-
-            case "r":
-                snakeColor = "#cc0000"
-                break
-            
-            default:
-                snakeColor = "black"
-        }
-        return snakeColor
-    }
-
-    const displayName = name => {
-        ctx.save()
-        ctx.font = "bold 30px sans-serif"
-        ctx.fillStyle = "#ffff66"
-        ctx.strokeStyle = "#ff9900"
-        ctx.fillText(name,5,20)
-        ctx.strokeText(name,5,20)
-        ctx.restore()
-    }
+    document.onkeydown = function handleKeyDown(e) {
+        const key = e.keyCode;
+        let newDirection;
     
-document.onkeydown = function handleKeyDown(e)
-{
-    const key = e.keyCode;
-    let newDirection;
-
-    switch(key)
-    {
-        case 37:
-            newDirection = "left";
-            break;
-        
-        case 38:
-            newDirection = "up";
-            break;       
+        switch(key)
+        {
+            case 37:
+                newDirection = "left";
+                break;
             
-        case 39:
-            newDirection = "right";
-            break;
+            case 38:
+                newDirection = "up";
+                break;       
+                
+            case 39:
+                newDirection = "right";
+                break;
+    
+            case 40:
+                newDirection = "down";
+                break;
+            
+            case 32:
+                this.launch()
+                return
+    
+            default:
+                throw("Invalid direction !!");
+        }
+        myGame.snayki.setDirection(newDirection)  
+        }
 
-        case 40:
-            newDirection = "down";
-            break;
-        
-        case 32:
-            launch()
-            return
-
-        default:
-            throw("Invalid direction !!");
-    }
-    snayki.setDirection(newDirection)  
-}
-
-init()
 
 }
