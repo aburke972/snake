@@ -46,7 +46,7 @@ window.onload = function()
                 }
                 while(pommli.isOnSnake(snayki))
 
-                if(score %5 == 0) speedUp()
+               // if(score %5 == 0) speedUp()
             }
             ctx.clearRect(0,0,canvasWidth,canvasHeight)
             drawScore()
