@@ -309,6 +309,8 @@ window.onload = function()
         }
 
     }
+    
+    //create a new game
 
     let myGame = new Game()
     myGame.init()
@@ -336,7 +338,7 @@ window.onload = function()
                 break;
             
             case 32:
-                this.launch()
+                myGame.launch()
                 return
     
             default:
