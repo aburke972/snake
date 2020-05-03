@@ -2,10 +2,10 @@ window.onload = function()
 {
     class Game {
 
-        constructor()
+        constructor(canvasWidth = 900,canvasHeight = 600)
         {
-            this.canvasWidth = 900
-            this.canvasHeight = 600
+            this.canvasWidth = canvasWidth
+            this.canvasHeight = canvasHeight
             this.blockSize = 30 
             this.canvas = document.createElement('canvas')
             this.ctx  = this.canvas.getContext("2d")
@@ -313,7 +313,9 @@ window.onload = function()
     //create a new game
 
     let myGame = new Game()
-    myGame.init()
+    let myGame2 = new Game()
+    myGame.init(200,75)
+    myGame2.init()
 
     document.onkeydown = function handleKeyDown(e) {
         const key = e.keyCode;
@@ -339,12 +341,14 @@ window.onload = function()
             
             case 32:
                 myGame.launch()
+                myGame2.launch()
                 return
     
             default:
                 throw("Invalid direction !!");
         }
         myGame.snayki.setDirection(newDirection)  
+        myGame2.snayki.setDirection(newDirection)
         }
 
 
